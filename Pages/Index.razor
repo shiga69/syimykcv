@@ -3,7 +3,7 @@
 @inject IJSRuntime JS
 @implements IDisposable
 
-<PageTitle>Syimyk Zhusupov — CV</PageTitle>
+<PageTitle>Syimyk Zhusupov - CV</PageTitle>
 
 <div class="bg-glow bg-glow-1"></div>
 <div class="bg-glow bg-glow-2"></div>
@@ -63,6 +63,24 @@
     <span class="section-num">03</span>
     <h2 class="section-title">@Loc.T("projects.title")</h2>
     <div class="projects-grid">
+        <article class="project-card project-card-featured reveal">
+            <span class="project-tool project-tool-featured">@Loc.T("proj0.tool")</span>
+            <h3>@Loc.T("proj0.title")</h3>
+            <ul>
+                <li>@Loc.T("proj0.p1")</li>
+                <li>@Loc.T("proj0.p2")</li>
+                <li>@Loc.T("proj0.p3")</li>
+            </ul>
+        </article>
+        <article class="project-card project-card-featured reveal">
+            <span class="project-tool project-tool-featured">@Loc.T("proj4.tool")</span>
+            <h3>@Loc.T("proj4.title")</h3>
+            <ul>
+                <li>@Loc.T("proj4.p1")</li>
+                <li>@Loc.T("proj4.p2")</li>
+                <li>@Loc.T("proj4.p3")</li>
+            </ul>
+        </article>
         <article class="project-card reveal">
             <span class="project-tool">@Loc.T("proj1.tool")</span>
             <h3>@Loc.T("proj1.title")</h3>
@@ -72,8 +90,8 @@
                 <li>@Loc.T("proj1.p3")</li>
             </ul>
         </article>
-        <article class="project-card reveal">
-            <span class="project-tool">@Loc.T("proj2.tool")</span>
+        <article class="project-card project-card-warning reveal">
+            <span class="project-tool project-tool-warning">@Loc.T("proj2.tool")</span>
             <h3>@Loc.T("proj2.title")</h3>
             <ul>
                 <li>@Loc.T("proj2.p1")</li>
@@ -107,9 +125,31 @@
 
     <h3 class="subsection-title">@Loc.T("certs.title")</h3>
     <div class="certs-grid">
-        <div class="cert-card"><strong>@Loc.T("cert1")</strong><span>@Loc.T("certs.issuer")</span></div>
-        <div class="cert-card"><strong>@Loc.T("cert2")</strong><span>@Loc.T("certs.issuer")</span></div>
-        <div class="cert-card"><strong>@Loc.T("cert3")</strong><span>@Loc.T("certs.issuer")</span></div>
+        <div class="cert-card cert-clickable" @onclick='() => ShowCert("certificates/cert1-cybersecurity-essentials.pdf")'>
+            <strong>@Loc.T("cert1")</strong>
+            <span>@Loc.T("certs.issuer")</span>
+            <span class="cert-view-btn">@Loc.T("certs.view") →</span>
+        </div>
+        <div class="cert-card cert-clickable" @onclick='() => ShowCert("certificates/cert2-python-essentials.pdf")'>
+            <strong>@Loc.T("cert2")</strong>
+            <span>@Loc.T("certs.issuer")</span>
+            <span class="cert-view-btn">@Loc.T("certs.view") →</span>
+        </div>
+        <div class="cert-card cert-clickable" @onclick='() => ShowCert("certificates/cert3-network-support-security.pdf")'>
+            <strong>@Loc.T("cert3")</strong>
+            <span>@Loc.T("certs.issuer")</span>
+            <span class="cert-view-btn">@Loc.T("certs.view") →</span>
+        </div>
+        <div class="cert-card cert-clickable" @onclick='() => ShowCert("certificates/cert4-ethical-hacker.pdf")'>
+            <strong>@Loc.T("cert4")</strong>
+            <span>@Loc.T("certs.issuer")</span>
+            <span class="cert-view-btn">@Loc.T("certs.view") →</span>
+        </div>
+        <div class="cert-card cert-clickable" @onclick='() => ShowCert("certificates/cert5-spaceshield-hackathon.pdf")'>
+            <strong>@Loc.T("cert5")</strong>
+            <span>@Loc.T("certs.issuer.hackathon")</span>
+            <span class="cert-view-btn">@Loc.T("certs.view") →</span>
+        </div>
     </div>
 
     <h3 class="subsection-title">@Loc.T("languages.title")</h3>
@@ -140,13 +180,27 @@
     <p>© @DateTime.Now.Year Syimyk Zhusupov — @Loc.T("footer.rights")</p>
 </footer>
 
+@if (ActiveCertPath != null)
+{
+    <div class="cert-modal-overlay" @onclick="CloseCertModal">
+        <div class="cert-modal" @onclick:stopPropagation="true">
+            <button class="cert-modal-close" @onclick="CloseCertModal">✕</button>
+            <embed src="@ActiveCertPath" type="application/pdf" class="cert-modal-pdf" />
+            <a class="cert-modal-download" href="@ActiveCertPath" target="_blank">Open in new tab ↗</a>
+        </div>
+    </div>
+}
+
 @code {
     private readonly List<string> Skills = new()
     {
-        "Linux", "Wireshark", "TCP/IP", "DNS", "DHCP", "Cisco Packet Tracer",
-        "Windows", "Git/GitHub", "SQL", "HTML", "OSI Model", "Python",
-        "Bash/Shell", "Network Troubleshooting", "Cybersecurity Fundamentals", "Log Analysis"
+        "C#", ".NET", "ASP.NET Core", "JWT Auth", "REST APIs", "Git/GitHub",
+        "SQL", "Python", "Linux", "Wireshark", "TCP/IP", "DNS", "DHCP",
+        "Cisco Packet Tracer", "Windows", "HTML", "OSI Model",
+        "Bash/Shell", "Network Troubleshooting", "Log Analysis"
     };
+
+    private string? ActiveCertPath;
 
     protected override void OnInitialized()
     {
@@ -167,6 +221,10 @@
     }
 
     private void ToggleLang() => Loc.Toggle();
+
+    private void ShowCert(string path) => ActiveCertPath = path;
+
+    private void CloseCertModal() => ActiveCertPath = null;
 
     public void Dispose()
     {
