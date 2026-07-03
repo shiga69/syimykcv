@@ -1,0 +1,175 @@
+@page "/"
+@inject LocalizationService Loc
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>Syimyk Zhusupov — CV</PageTitle>
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<nav class="navbar">
+    <div class="navbar-inner">
+        <span class="logo">SZ<span class="accent">.</span></span>
+        <div class="nav-links">
+            <a href="#about" @onclick='() => Scroll("about")' @onclick:preventDefault>@Loc.T("nav.about")</a>
+            <a href="#skills" @onclick='() => Scroll("skills")' @onclick:preventDefault>@Loc.T("nav.skills")</a>
+            <a href="#projects" @onclick='() => Scroll("projects")' @onclick:preventDefault>@Loc.T("nav.projects")</a>
+            <a href="#education" @onclick='() => Scroll("education")' @onclick:preventDefault>@Loc.T("nav.education")</a>
+            <a href="#contact" @onclick='() => Scroll("contact")' @onclick:preventDefault>@Loc.T("nav.contact")</a>
+        </div>
+        <button class="lang-toggle" @onclick="ToggleLang">
+            <span class="@(Loc.CurrentLang == "en" ? "active" : "")">EN</span>
+            <span class="sep">/</span>
+            <span class="@(Loc.CurrentLang == "pl" ? "active" : "")">PL</span>
+        </button>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="hero-content">
+        <p class="hero-kicker reveal">Syimyk Zhusupov</p>
+        <h1 class="hero-title reveal">
+            <span class="typewriter">@Loc.T("hero.role")</span>
+        </h1>
+        <p class="hero-tagline reveal">@Loc.T("hero.tagline")</p>
+        <div class="hero-actions reveal">
+            <a class="btn btn-primary" href="#contact" @onclick='() => Scroll("contact")' @onclick:preventDefault>@Loc.T("hero.cta.contact")</a>
+            <a class="btn btn-ghost" href="files/Syimyk_Zhusupov_CV.pdf" download>@Loc.T("hero.cta.cv")</a>
+        </div>
+    </div>
+    <div class="scroll-indicator reveal"><span></span></div>
+</header>
+
+<section id="about" class="section reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">@Loc.T("about.title")</h2>
+    <p class="about-text">@Loc.T("about.text")</p>
+    <p class="about-location">📍 @Loc.T("about.location")</p>
+</section>
+
+<section id="skills" class="section reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">@Loc.T("skills.title")</h2>
+    <div class="tag-cloud">
+        @foreach (var skill in Skills)
+        {
+            <span class="tag">@skill</span>
+        }
+    </div>
+</section>
+
+<section id="projects" class="section reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">@Loc.T("projects.title")</h2>
+    <div class="projects-grid">
+        <article class="project-card reveal">
+            <span class="project-tool">@Loc.T("proj1.tool")</span>
+            <h3>@Loc.T("proj1.title")</h3>
+            <ul>
+                <li>@Loc.T("proj1.p1")</li>
+                <li>@Loc.T("proj1.p2")</li>
+                <li>@Loc.T("proj1.p3")</li>
+            </ul>
+        </article>
+        <article class="project-card reveal">
+            <span class="project-tool">@Loc.T("proj2.tool")</span>
+            <h3>@Loc.T("proj2.title")</h3>
+            <ul>
+                <li>@Loc.T("proj2.p1")</li>
+                <li>@Loc.T("proj2.p2")</li>
+                <li>@Loc.T("proj2.p3")</li>
+            </ul>
+        </article>
+        <article class="project-card reveal">
+            <span class="project-tool">@Loc.T("proj3.tool")</span>
+            <h3>@Loc.T("proj3.title")</h3>
+            <ul>
+                <li>@Loc.T("proj3.p1")</li>
+                <li>@Loc.T("proj3.p2")</li>
+                <li>@Loc.T("proj3.p3")</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<section id="education" class="section reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-title">@Loc.T("education.title")</h2>
+    <div class="timeline-item">
+        <span class="timeline-years">@Loc.T("education.years")</span>
+        <div>
+            <h3>@Loc.T("education.degree")</h3>
+            <p class="timeline-school">@Loc.T("education.school")</p>
+            <p class="timeline-desc">@Loc.T("education.coursework")</p>
+        </div>
+    </div>
+
+    <h3 class="subsection-title">@Loc.T("certs.title")</h3>
+    <div class="certs-grid">
+        <div class="cert-card"><strong>@Loc.T("cert1")</strong><span>@Loc.T("certs.issuer")</span></div>
+        <div class="cert-card"><strong>@Loc.T("cert2")</strong><span>@Loc.T("certs.issuer")</span></div>
+        <div class="cert-card"><strong>@Loc.T("cert3")</strong><span>@Loc.T("certs.issuer")</span></div>
+    </div>
+
+    <h3 class="subsection-title">@Loc.T("languages.title")</h3>
+    <div class="lang-grid">
+        <div class="lang-card"><strong>@Loc.T("lang.ru")</strong><span>@Loc.T("lang.ru.level")</span></div>
+        <div class="lang-card"><strong>@Loc.T("lang.en")</strong><span>@Loc.T("lang.en.level")</span></div>
+        <div class="lang-card"><strong>@Loc.T("lang.pl")</strong><span>@Loc.T("lang.pl.level")</span></div>
+    </div>
+</section>
+
+<section id="contact" class="section reveal contact-section">
+    <span class="section-num">05</span>
+    <h2 class="section-title">@Loc.T("contact.title")</h2>
+    <p class="about-text">@Loc.T("contact.text")</p>
+    <div class="contact-grid">
+        <a class="contact-card" href="mailto:zhusupovsyimyk66@@gmail.com">
+            <span class="contact-label">@Loc.T("contact.email")</span>
+            <span class="contact-value">zhusupovsyimyk66@@gmail.com</span>
+        </a>
+        <a class="contact-card" href="tel:+48503442257">
+            <span class="contact-label">@Loc.T("contact.phone")</span>
+            <span class="contact-value">+48 503 442 257</span>
+        </a>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>© @DateTime.Now.Year Syimyk Zhusupov — @Loc.T("footer.rights")</p>
+</footer>
+
+@code {
+    private readonly List<string> Skills = new()
+    {
+        "Linux", "Wireshark", "TCP/IP", "DNS", "DHCP", "Cisco Packet Tracer",
+        "Windows", "Git/GitHub", "SQL", "HTML", "OSI Model", "Python",
+        "Bash/Shell", "Network Troubleshooting", "Cybersecurity Fundamentals", "Log Analysis"
+    };
+
+    protected override void OnInitialized()
+    {
+        Loc.OnChange += StateHasChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("siteInterop.initScrollReveal");
+        }
+    }
+
+    private async Task Scroll(string id)
+    {
+        await JS.InvokeVoidAsync("siteInterop.smoothScrollTo", id);
+    }
+
+    private void ToggleLang() => Loc.Toggle();
+
+    public void Dispose()
+    {
+        Loc.OnChange -= StateHasChanged;
+    }
+}
